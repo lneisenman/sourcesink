@@ -1,0 +1,43 @@
+# Replace 'modern_python_template' with the name of the project
+# including in [tools.pytest.ini_options] '--cov=modern_python_template'
+# Then update dependencies
+
+[build-system]
+requires = ["setuptools>=48", "wheel >= 0.29.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "modern_python_template"
+description = "modern python template"
+version = "0.1.0-dev0"
+authors = [
+    {name = "Larry Eisenman", email = "leisenman@wustl.edu"}
+]
+license = {file = "LICENSE"}
+readme = "README.rst"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD3 License",
+    "Operating System :: OS Independent",
+    "Development Status :: 2 - Pre-Alpha"
+]
+requires-python = ">=3.8"
+dependencies = [
+    "scipy",
+    "matplotlib",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov"
+]
+
+[project.urls]
+homepage = "https://github.com/lneisenman/modern_python_template"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-rsxXf --cov-report term-missing --cov=modern_python_template"
+norecursedirs = [".cache", ".git", ".tox", "build", "*.egg-info"]
+testpaths = ["tests"]
