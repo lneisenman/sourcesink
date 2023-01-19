@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .template import *
+from .sourcesink import *
 
 
 __author__ = """Larry Eisenman"""
