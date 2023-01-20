@@ -7,8 +7,8 @@ requires = ["setuptools>=48", "wheel >= 0.29.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "modern_python_template"
-description = "modern python template"
+name = "sourcesink"
+description = "code for source/sink analysis of SEEG data"
 version = "0.1.0-dev0"
 authors = [
     {name = "Larry Eisenman", email = "leisenman@wustl.edu"}
@@ -34,10 +34,10 @@ test = [
 ]
 
 [project.urls]
-homepage = "https://github.com/lneisenman/modern_python_template"
+homepage = "https://github.com/lneisenman/sourcesink"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-rsxXf --cov-report term-missing --cov=modern_python_template"
+addopts = "-rsxXf --cov-report term-missing --cov=sourcesink"
 norecursedirs = [".cache", ".git", ".tox", "build", "*.egg-info"]
 testpaths = ["tests"]
