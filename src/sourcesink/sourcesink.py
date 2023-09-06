@@ -2,6 +2,7 @@
 
 import mne
 import numpy as np
+from typing import Tuple
 
 
 def make_trace(timesteps: int, initial: np.ndarray,
@@ -26,3 +27,16 @@ def calcA(data: np.ndarray) -> np.ndarray:
 
     (X, __, __, __) = np.linalg.lstsq(H, b, rcond=None)
     return X.reshape((channels, channels))
+
+
+def calc_Abar(eeg: mne.io.Raw, step: float = 0.5) -> Tuple[np.ndarray,
+                                                           np.ndarray]:
+    points = int(eeg.info['sfreq'] * step)
+    length = len(eeg.ch_names)
+    steps = int((eeg.n_times/eeg.info['sfreq'])/step)
+    Avals = np.zeros((length, length, steps))
+    for i in range(steps):
+        Avals[:, :, i] = calcA(eeg.get_data(picks=None, start=i*points,
+                                            stop=(i+1)*points))
+
+    return Avals, np.average(Avals, axis=-1)
