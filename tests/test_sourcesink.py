@@ -40,3 +40,9 @@ def test_calc_Abar(testA, trace_eeg):
     print(f'test = {test}')
     print(f'testA = {testA}')
     npt.assert_allclose(test, testA, rtol=1e-6)
+
+
+def test_calc_ranks(trueA):
+    cr, rr = ss.calc_ranks(trueA)
+    assert cr[1] == 1/4
+    assert rr[1] == 1

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from typing import Tuple
+
 import mne
 from mne_connectivity import vector_auto_regression as vecAR
 import numpy as np
-from typing import Tuple
+import scipy as sp
 
 
 def make_trace(timesteps: int, initial: np.ndarray,
@@ -28,3 +30,16 @@ def calc_Abar(eeg: mne.io.Raw, step: float = 0.5,
     conn = vecAR(epochs.get_data(), times=times, names=ch_names,
                  model='avg-epochs')
     return conn.get_data('dense')
+
+
+def calc_ranks(A:np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    rows = A.shape[0]
+    cnorm = np.zeros(rows)
+    rnorm = np.zeros(rows)
+    for i in range(rows):
+        cnorm[i] = np.linalg.norm(A[:, i], 1) - np.abs(A[i, i])
+        rnorm[i] = np.linalg.norm(A[i, :], 1) - np.abs(A[i, i])
+
+    cr = sp.stats.rankdata(cnorm)
+    rr = sp.stats.rankdata(rnorm)
+    return cr/rows, rr/rows
