@@ -48,7 +48,22 @@ def test_calc_ranks(trueA):
     assert np.abs(rr[1] - 1) < 1e-6
 
 
-def test_sink_src(trueA):
+def test_calc_sink_src(trueA):
     sink, src = ss.calc_sink_src(trueA)
     assert np.abs(sink[1] - np.sqrt(2)) < 1e-6
     assert np.abs(src[1] - np.sqrt(2)/4) < 1e-6
+
+
+def test_calc_infl_conn(trueA):
+    infl, conn = ss.calc_infl_conn(trueA)
+    assert np.abs(infl[1] - 2.075) < 1e-6
+    assert np.abs(conn[1] - 2.175) < 1e-6
+
+
+def test_calc_SSM(trueA):
+    sink, src, infl, conn, SSI = ss.calc_SSM(trueA)
+    assert np.abs(sink[1] - 1) < 1e-6
+    assert np.abs(src[1] - 0.25) < 1e-6
+    assert np.abs(infl[1] - 1) < 1e-6
+    assert np.abs(conn[1] - 1) < 1e-6
+    assert np.abs(SSI[1] - 1) < 1e-6

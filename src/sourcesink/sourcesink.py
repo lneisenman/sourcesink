@@ -55,3 +55,35 @@ def calc_sink_src(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         srcidx[i] = np.sqrt(2) - np.linalg.norm((rr[i]-(1/len(cr)), cr[i]-1))
 
     return sinkidx, srcidx
+
+
+def calc_infl_conn(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    sink, src = calc_sink_src(A)
+    sink /= np.max(sink)
+    src /= np.max(src)
+    infl = np.zeros_like(sink)
+    conn = np.zeros_like(sink)
+    for i in range(len(infl)):
+        for j in range(len(infl)):
+            infl[i] += np.abs(A[i, j])*src[j]
+            conn[i] += np.abs(A[i, j])*sink[j]
+
+    return infl, conn
+
+
+def calc_SSM(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray,
+                                     np.ndarray, np.ndarray]:
+    sink, src = calc_sink_src(A)
+    sink /= np.max(sink)
+    src /= np.max(src)
+    infl = np.zeros_like(sink)
+    conn = np.zeros_like(sink)
+    for i in range(len(infl)):
+        for j in range(len(infl)):
+            infl[i] += np.abs(A[i, j])*src[j]
+            conn[i] += np.abs(A[i, j])*sink[j]
+
+    infl /= np.max(infl)
+    conn /= np.max(conn)
+    SSI = sink*infl*conn
+    return sink, src, infl, conn, SSI
