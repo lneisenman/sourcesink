@@ -43,3 +43,15 @@ def calc_ranks(A:np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     cr = sp.stats.rankdata(cnorm)
     rr = sp.stats.rankdata(rnorm)
     return cr/rows, rr/rows
+
+
+def calc_sink_src(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    cr, rr = calc_ranks(A)
+    sinkidx = np.zeros_like(cr)
+    srcidx = np.zeros_like(cr)
+    for i in range(len(sinkidx)):
+        print(i, rr[i], cr[i], np.linalg.norm((rr[i]-1, cr[i]-(1/len(cr)))))
+        sinkidx[i] = np.sqrt(2) - np.linalg.norm((rr[i]-1, cr[i]-(1/len(cr))))
+        srcidx[i] = np.sqrt(2) - np.linalg.norm((rr[i]-(1/len(cr)), cr[i]-1))
+
+    return sinkidx, srcidx

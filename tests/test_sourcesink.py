@@ -26,7 +26,7 @@ def trace_eeg(testA):
 
 def test_make_trace(trueA):
     trace = ss.make_trace(2, np.ones(2), trueA[:2, :2])
-    result = np.array([[1., 0.2], [1., 0.3]])
+    result = np.array([[1., 0.9], [1., 1.7]])
     npt.assert_allclose(trace, result)
 
 
@@ -44,5 +44,11 @@ def test_calc_Abar(testA, trace_eeg):
 
 def test_calc_ranks(trueA):
     cr, rr = ss.calc_ranks(trueA)
-    assert cr[1] == 1/4
-    assert rr[1] == 1
+    assert np.abs(cr[1] - 1/4) < 1e-6
+    assert np.abs(rr[1] - 1) < 1e-6
+
+
+def test_sink_src(trueA):
+    sink, src = ss.calc_sink_src(trueA)
+    assert np.abs(sink[1] - np.sqrt(2)) < 1e-6
+    assert np.abs(src[1] - np.sqrt(2)/4) < 1e-6
