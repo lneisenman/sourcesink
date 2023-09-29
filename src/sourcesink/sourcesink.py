@@ -20,9 +20,9 @@ def calcA(data: np.ndarray) -> np.ndarray:
     return vecAR(np.expand_dims(data, axis=0)).get_data('dense')[0, :, :]
 
 
-def calc_Abar(eeg: mne.io.Raw, step: float = 0.5) -> Tuple[np.ndarray,
-                                                           np.ndarray]:
-    epochs = mne.make_fixed_length_epochs(raw=eeg, duration=step, overlap=0)
+def calc_Abar(eeg: mne.io.Raw, step: float = 0.5,
+              overlap: float = 0.25) -> Tuple[np.ndarray, np.ndarray]:
+    epochs = mne.make_fixed_length_epochs(raw=eeg, duration=step, overlap=overlap)
     times = epochs.times
     ch_names = epochs.ch_names
     conn = vecAR(epochs.get_data(), times=times, names=ch_names,
