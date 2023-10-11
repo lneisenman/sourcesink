@@ -95,3 +95,13 @@ def calc_SSM(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray,
     conn /= np.max(conn)
     SSI = sink*infl*conn
     return sink, src, infl, conn, SSI
+
+
+def calc_SSI(conn) -> np.ndarray:
+    A = conn.get_data()
+    SSI = np.zeros((A.shape[1], A.shape[0]))
+    for i in range(A.shape[0]):
+        SSM = calc_SSM(A[i, :, :])
+        SSI[:, i] = SSM[-1]
+
+    return SSI
