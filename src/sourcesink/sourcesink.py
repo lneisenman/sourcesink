@@ -2,6 +2,7 @@
 
 from typing import Tuple
 
+import matplotlib.pyplot as plt
 import mne
 from mne_connectivity import EpochConnectivity
 from mne_connectivity import vector_auto_regression as vecAR
@@ -105,3 +106,24 @@ def calc_SSI(conn) -> np.ndarray:
         SSI[:, i] = SSM[-1]
 
     return SSI
+
+
+def plot_SSI(conn, electrodes):
+    SSI = calc_SSI(conn)
+    lengths = list()
+    for electrode in electrodes:
+        temp = [contact for contact in conn.names if electrode in contact]
+        lengths.append(len(temp))
+    
+    xticks = [x for x in range(0, 121, 20)]
+    xticklabels = [str(x) for x in range(0, 61, 10)]
+    yticks = [0]
+    yticks.extend(np.cumsum(lengths)[:-1])
+    fig, ax = plt.subplots(1, 1)
+    ax.imshow(SSI)
+    ax.set_xticks(xticks)
+    ax.set_xticklabels(xticklabels)
+    ax.set_xlabel('time (sec)')
+    ax.set_yticks(yticks)
+    ax.set_yticklabels(electrodes)
+    return fig, ax
