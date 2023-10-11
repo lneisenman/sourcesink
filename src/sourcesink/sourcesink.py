@@ -3,6 +3,7 @@
 from typing import Tuple
 
 import mne
+from mne_connectivity import EpochConnectivity
 from mne_connectivity import vector_auto_regression as vecAR
 import numpy as np
 import scipy as sp
@@ -22,14 +23,22 @@ def calcA(data: np.ndarray) -> np.ndarray:
     return vecAR(np.expand_dims(data, axis=0)).get_data('dense')[0, :, :]
 
 
+def calc_A(eeg: mne.io.Raw, step: float = 0.5,
+           overlap: float = 0.25) -> EpochConnectivity:
+    epochs = mne.make_fixed_length_epochs(raw=eeg, duration=step, overlap=overlap)
+    times = epochs.times
+    ch_names = epochs.ch_names
+    return vecAR(epochs.get_data(), times=times, names=ch_names)
+
+
 def calc_Abar(eeg: mne.io.Raw, step: float = 0.5,
-              overlap: float = 0.25) -> Tuple[np.ndarray, np.ndarray]:
+              overlap: float = 0.25) -> EpochConnectivity:
     epochs = mne.make_fixed_length_epochs(raw=eeg, duration=step, overlap=overlap)
     times = epochs.times
     ch_names = epochs.ch_names
     conn = vecAR(epochs.get_data(), times=times, names=ch_names,
                  model='avg-epochs')
-    return conn.get_data('dense')
+    return conn
 
 
 def calc_ranks(A:np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
@@ -50,7 +59,6 @@ def calc_sink_src(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     sinkidx = np.zeros_like(cr)
     srcidx = np.zeros_like(cr)
     for i in range(len(sinkidx)):
-        print(i, rr[i], cr[i], np.linalg.norm((rr[i]-1, cr[i]-(1/len(cr)))))
         sinkidx[i] = np.sqrt(2) - np.linalg.norm((rr[i]-1, cr[i]-(1/len(cr))))
         srcidx[i] = np.sqrt(2) - np.linalg.norm((rr[i]-(1/len(cr)), cr[i]-1))
 

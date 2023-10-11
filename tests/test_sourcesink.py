@@ -35,11 +35,16 @@ def test_calcA(trueA, trace):
     npt.assert_allclose(A, trueA, rtol=1e-6)
 
 
+def test_calc_A(testA, trace_eeg):
+    conn = ss.calc_A(trace_eeg)
+    data = conn.get_data()
+    for i in range(data.shape[0]):
+        npt.assert_allclose(data[i, :, :], testA)
+
+
 def test_calc_Abar(testA, trace_eeg):
-    test = ss.calc_Abar(trace_eeg)
-    print(f'test = {test}')
-    print(f'testA = {testA}')
-    npt.assert_allclose(test, testA, rtol=1e-6)
+    conn = ss.calc_Abar(trace_eeg)
+    npt.assert_allclose(conn.get_data(), testA, rtol=1e-6)
 
 
 def test_calc_ranks(trueA):
